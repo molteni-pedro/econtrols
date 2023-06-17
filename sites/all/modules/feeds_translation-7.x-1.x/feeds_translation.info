@@ -1,0 +1,8 @@
+name = Feeds Translation
+description = Adds integration for Content Translation (i.e. tnid) to Feeds
+core = 7.x
+version = 7.x-1.x-dev
+
+dependencies[] = feeds (>=2.0-alpha8)
+dependencies[] = feeds_tamper
+dependencies[] = translation

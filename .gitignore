@@ -4,3 +4,8 @@ sites/*/settings*.php
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+f/
+tmp/
+*.txt
+.lando.yml
+adminer.php

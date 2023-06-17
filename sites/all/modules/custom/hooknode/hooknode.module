@@ -1,0 +1,36 @@
+<?php
+
+      /**
+       * Implements hook_form_alter().
+       *
+       * Modifies the node forms for "gestion_pdfs" and "gestion_fotos" content types
+       * to set a default value for the "field_vinculacion" field based on a referenced node.
+       *
+       * @param $form
+       *   The form structure to be altered.
+       * @param $form_state
+       *   An associative array containing the current state of the form.
+       * @param $form_id
+       *   A string representing the unique ID of the form.
+       */
+
+     
+    function hooknode_form_alter(&$form, &$form_state, $form_id) {
+        if ($form_id == 'gestion_pdfs_node_form' ||  $form_id == 'gestion_fotos_node_form') {
+          
+          if (empty($form['nid']['#value'])) {
+            $current_path = $_GET['q'];
+            $path_args = explode('/', $current_path);
+            $numero_entero = intval($path_args[3]);
+            $referenced_node = node_load($numero_entero); // Carga el nodo referenciado.
+            if (!empty($referenced_node)) {
+              $referenced_node_title = $referenced_node->title; // Obtiene el título del nodo referenciado.
+              $entity_title = isset($referenced_node_title) ? $referenced_node_title : $titulo; // Obtiene el título de la entidad referenciada.
+              $form['field_vinculacion'][LANGUAGE_NONE][0]['target_id']['#value'] = $entity_title .  " ($numero_entero)";
+            }
+          }
+
+        }
+      }
+
+      

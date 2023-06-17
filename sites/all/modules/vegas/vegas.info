@@ -1,0 +1,14 @@
+name = Vegas
+description = Vegas is a jQuery plugin to add beautiful fullscreen backgrounds and slideshows to your webpages.
+core = 7.x
+
+dependencies[] = libraries (>=7.x-2.0)
+
+configure = admin/appearance/vegas
+
+; Information added by Drupal.org packaging script on 2017-11-15
+version = "7.x-1.0-beta1"
+core = "7.x"
+project = "vegas"
+datestamp = "1510713788"
+

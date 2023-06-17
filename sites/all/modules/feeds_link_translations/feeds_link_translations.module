@@ -1,0 +1,67 @@
+<?php
+/* 
+ * Links translations together
+ */
+function feeds_link_translations_feeds_after_import($source) {
+
+  //TODO: make this a configurable parameter
+  $field = 'field_tnid_web_antiga';
+
+  //Source language: default site language nids are used in order to link node translations together with tnid columns
+  $source_lang = language_default();
+  $source_lang = $source_lang->language;
+  
+
+  //I. Building hash table with default language nodes: given a source tnid it gives you the value of target tnid
+  $result = db_query('SELECT n.nid,f.field_tnid_web_antiga_value FROM {node} n, {field_data_field_tnid_web_antiga} f WHERE f.entity_id = n.nid and n.tnid=0 and n.language = :language', array(':language' => $source_lang));
+  $node_def = $result->fetchAll();
+
+  $array_source = array();
+  $array_source_new_tnid = array();
+  if(is_array($node_def) && count($node_def)>0) {
+    foreach($node_def as $n) {
+      $array_source[] = $n->field_tnid_web_antiga_value;
+      $array_source_new_tnid[$n->field_tnid_web_antiga_value] = $n->nid;
+    }
+  }
+
+  //II. For each language, we check all nodes and set their tnid column with its correct value if we have the translation for old tnid
+  $list = array_keys(language_list());
+
+  $link_counter = 0;
+
+  foreach ($list as $curr_lang) {
+
+    $result = db_query('SELECT n.nid,f.field_tnid_web_antiga_value FROM {node} n, {field_data_field_tnid_web_antiga} f WHERE f.entity_id = n.nid and n.tnid=0 and n.language = :language', array(':language' => $curr_lang));
+    $node_curr_lang = $result->fetchAll();
+
+    if(is_array($node_curr_lang) && count($node_curr_lang)>0) {
+      
+      foreach($node_curr_lang as $n) {
+
+        if(($n->field_tnid_web_antiga_value != '0') && in_array($n->field_tnid_web_antiga_value, $array_source)) {
+
+          $nid_def = $array_source_new_tnid[$n->field_tnid_web_antiga_value];
+          $nid_curr = $n->nid;
+
+          if($nid_curr != $nid_def) {
+
+              db_update('node')
+                ->condition('nid', $nid_def)
+                ->fields(array('tnid' => $nid_def))
+                ->execute();
+
+              db_update('node')
+                ->condition('nid', $nid_curr)
+                ->fields(array('tnid' => $nid_def))
+                ->execute();
+
+              $link_counter++;
+           }
+        }
+      }
+    }
+  }
+
+  drupal_set_message(sprintf(t('%d nodes have been linked with their translations'), $link_counter));
+}

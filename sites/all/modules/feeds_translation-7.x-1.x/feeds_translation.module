@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Update Feeds to support Content Translation
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function feeds_translation_ctools_plugin_directory($module, $api) {
+  if ($module == 'feeds_tamper') {
+    return 'plugins/feeds_tamper';
+  }
+}
+
+/**
+ * Implements hook_feeds_plugins_alter().
+ */
+function feeds_translation_feeds_plugins_alter(&$plugins) {
+  // Replace the default parser and processor
+  if (isset($plugins['FeedsParser'])) {
+    $plugins['FeedsParser']['handler']['path'] = drupal_get_path('module', 'feeds_translation') . '/plugins/feeds';
+  }
+  if (isset($plugins['FeedsProcessor'])) {
+    $plugins['FeedsProcessor']['handler']['path'] = drupal_get_path('module', 'feeds_translation') . '/plugins/feeds';
+  }
+}
+
+/**
+ * Implements hook_feeds_processor_targets_alter().
+ *
+ * @see feeds/plugins/FeedsNodeProcessor.inc
+ */
+function feeds_translation_feeds_processor_targets_alter(&$targets, $entity_type, $bundle) {
+  if ($entity_type == 'node' and translation_supported_type($bundle)) {
+    $targets['tnid'] = array(
+      'name' => t('Translation node id'),
+      'description' => t('The translation node id (i.e. tnid) for a node. <em>NOTE: use this feature with care, node tnids are usually assigned by Drupal.</em>'),
+    );    
+  }
+}
+
+/**
+ * Implements hook_feeds_parser_sources_alter().
+ *
+ * @see feeds/plugins/FeedsParser.inc
+ */
+function feeds_translation_feeds_parser_sources_alter(&$sources, $content_type) {
+  $sources['parent:tnid'] = array(
+    'name' => t('Feed node: Translated Node ID'),
+    'description' => t('The feed node tnid.'),
+  );
+}
