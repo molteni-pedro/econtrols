@@ -1838,3 +1838,27 @@ body.node-type-tipo-de-aplicacion .field-name-field-descripcion-general .view-fo
     padding: 0 20px;
     margin-top: 27px;
 }
+body.node-type-producto  .views-field-commerce-price .field-content{
+  display: inline;
+  font-family: "QuicksandBold-Regular";
+  color: green;
+  font-size: 20px;
+  font-weight: bolder;
+}
+body.node-type-producto .field-type-commerce-price .field-item {
+  max-width: 250px ;
+  float: left;
+  margin-right: 20px;
+  margin-top: 0px;
+  font-family: "QuicksandBold-Regular";
+  color: green;
+  font-size: 20px;
+  font-weight: bolder;
+}
+body.node-type-producto form.commerce-add-to-cart  input#edit-submit{
+  background-color: #BC3928;
+  color: #fff;
+  border: none;
+  padding: 5px;
+  margin-top: -3px;
+}
