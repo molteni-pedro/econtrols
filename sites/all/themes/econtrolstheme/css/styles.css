@@ -1862,3 +1862,17 @@ body.node-type-producto form.commerce-add-to-cart  input#edit-submit{
   padding: 5px;
   margin-top: -3px;
 }
+.cart_popup_count {
+  float: left;
+  font-size: 10px !important;
+  line-height: .85;
+  margin-top: 5px;
+  margin-left: 5px;
+  color: #555;
+}
+
+.cart-icon {
+  width: 20px !important;
+  height: 20px !important;
+  background-size: 16px !important;
+}
