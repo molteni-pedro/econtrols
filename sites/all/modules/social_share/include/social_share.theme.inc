@@ -81,10 +81,16 @@ function theme_social_share_links($variables) {
       return array();
     }
   }
-  $content['networks'] = array(
-    '#type' => 'markup',
-    '#markup' => theme('links', array('links' => $content['networks'], 'attributes' => array(), 'heading' => ''))
-  );
+   if (!empty($content['networks'])) {
+       $content['networks'] = array(
+       '#type' => 'markup',
+        '#markup' => theme('links', array(
+        'links' => $content['networks'],
+        'attributes' => array(),
+        'heading' => ''
+        ))
+       );
+      }
   return $content;
 }
 
